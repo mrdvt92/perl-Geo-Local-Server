@@ -76,7 +76,7 @@ I recommend building and installing an RPM from the included SPEC file which ins
 
     rpmbuild -ta Geo-Local-Server-?.??.tar.gz
 
-Outerwise copy the example etc/local.coorindates file to either /etc/ or C:\\Windows\\ and then update the coordinates to match your server location.
+Otherwise copy the example etc/local.coorindates file to either /etc/ or C:\\Windows\\ and then update the coordinates to match your server location.
 
 ## Environment
 

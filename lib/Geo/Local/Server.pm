@@ -83,26 +83,26 @@ Returns a list of longitude, latitude and height above the ellipsoid
 
 sub lonlathae {
   my $self=shift;
-  unless ($self->{"lonlathae"}) {
-    my $coordinates = "";
+  unless ($self->{'lonlathae'}) {
+    my $coordinates = '';
     my $envname     = $self->envname;
-    my $file        = "";
+    my $file        = '';
     if ($envname) {
-      $coordinates =  $ENV{$envname} || "";
+      $coordinates =  $ENV{$envname} || '';
       $coordinates =~ s/^\s*//; #trim white space from beginning
       $coordinates =~ s/\s*$//; #trim white space from end
     }
     if ($coordinates) {
       #First Step Pull from environment which can be configured by user
       my ($lon, $lat, $hae) = split(/\s+/, $coordinates);
-      $self->{"lonlathae"}  = [$lon, $lat, $hae];
-    } elsif (defined($file = $self->configfile) and -r $file and defined($self->ci) and $self->ci->SectionExists("wgs84")) {
+      $self->{'lonlathae'}  = [$lon, $lat, $hae];
+    } elsif (defined($file = $self->configfile) and -r $file and defined($self->ci) and $self->ci->SectionExists('wgs84')) {
       #We assign the config filename inside the elsif to not load runtime requires if we hit the ENV above.
       #Second Step Pull from file system which can be configured by system
-      my $lat = $self->ci->val(wgs84 => "latitude");
-      my $lon = $self->ci->val(wgs84 => "longitude");
-      my $hae = $self->ci->val(wgs84 => "hae");
-      $self->{"lonlathae"} = [$lon, $lat, $hae];
+      my $lat = $self->ci->val(wgs84 => 'latitude');
+      my $lon = $self->ci->val(wgs84 => 'longitude');
+      my $hae = $self->ci->val(wgs84 => 'hae');
+      $self->{'lonlathae'} = [$lon, $lat, $hae];
     } else {
       #TODO: GeoIP
       #TODO: gpsd
@@ -113,7 +113,7 @@ sub lonlathae {
       die("$error ");
     }
   }
-  return @{$self->{"lonlathae"}};
+  return @{$self->{'lonlathae'}};
 }
 
 =head1 PROPERTIES
@@ -130,9 +130,9 @@ Sets and returns the name of the environment variable.
 
 sub envname {
   my $self           = shift;
-  $self->{"envname"} = shift if $_;
-  $self->{"envname"} = $self->_envname_default unless defined $self->{"envname"};
-  return $self->{"envname"};
+  $self->{'envname'} = shift if $_;
+  $self->{'envname'} = $self->_envname_default unless defined $self->{'envname'};
+  return $self->{'envname'};
 }
 
 sub _envname_default {'COORDINATES_WGS84_LON_LAT_HAE'}
@@ -149,20 +149,20 @@ Sets and returns the location of the local.coordinates filename.
 
 sub configfile {
   my $self              = shift;
-  $self->{"configfile"} = shift if @_;
-  unless (defined $self->{"configfile"}) {
-    my $file = "local.coordinates";
-    my $path = "/etc"; #default is unix-like systems
-    if ($^O eq "MSWin32") {
-      eval("use Win32");
-      $path = eval("Win32::GetFolderPath(Win32::CSIDL_WINDOWS)") unless $@;
+  $self->{'configfile'} = shift if @_;
+  unless (defined $self->{'configfile'}) {
+    my $file = 'local.coordinates';
+    my $path = '/etc'; #default is unix-like systems
+    if ($^O eq 'MSWin32') {
+      eval('use Win32');
+      $path = eval('Win32::GetFolderPath(Win32::CSIDL_WINDOWS)') unless $@;
     } else {
-      eval("use Sys::Path");
-      $path = eval("Sys::Path->sysconfdir") unless $@;
+      eval('use Sys::Path');
+      $path = eval('Sys::Path->sysconfdir') unless $@;
     }
-    $self->{"configfile"} = file($path => $file); #isa Path::Class::File
+    $self->{'configfile'} = file($path => $file); #isa Path::Class::File
   }
-  return $self->{"configfile"};
+  return $self->{'configfile'};
 }
 
 =head1 CONFIGURATION
@@ -213,7 +213,7 @@ sub ci {
   my $self      = shift;
   my $file      = $self->configfile; #support for objects that can stringify paths.
   $self->{'ci'} = Config::IniFiles->new(-file=>"$file")
-    unless ref($self->{'ci'}) eq "Config::IniFiles";
+    unless ref($self->{'ci'}) eq 'Config::IniFiles';
   return $self->{'ci'};
 }
 
